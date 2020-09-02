@@ -2,5 +2,5 @@
 
 char = 97
 while (char < 123):
-    print(chr(char), end="")
+    print("{0}".format(chr(char)), end="")
     char = char + 1
