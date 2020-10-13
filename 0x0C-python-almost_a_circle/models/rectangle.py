@@ -80,3 +80,29 @@ class Rectangle(Base):
         print("\n" * self.__y, end="")
         print(((" " * self.__x) + ("#" * self.__width) + "\n")*self.__height,
         end="")
+
+    def __str__(self):
+        """string representation"""
+        i1 = '(' + str(self.id) + ') ' + str(self.__x) + '/'
+        i2 = str(self.__y) + ' - ' + str(self.__width)
+        return "[Rectangle] " + i1 + i2 + "/" + str(self.__height)
+
+    def update(self, *args, **kwargs):
+        """method to update attributes by args"""
+        attr = ['id', 'width', 'height', 'x', 'y']
+        if args and args[0] is not None:
+            for i in range(len(args)):
+                setattr(self, attr[i], args[i])
+        else:
+            for key in kwargs:
+                setattr(self, key, kwargs[key])
+
+    def to_dictionary(self):
+        """Returns the dictionary representation of a Rectangle"""
+        d = {}
+        d["id"] = self.id
+        d["width"] = self.width
+        d["height"] = self.height
+        d["x"] = self.x
+        d["y"] = self.y
+        return d
