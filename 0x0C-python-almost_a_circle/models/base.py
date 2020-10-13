@@ -2,7 +2,7 @@
 """base for objects"""
 
 
-class base:
+class Base:
     """base for all point in the proyect"""
     __nb_objects = 0
 
