@@ -1,12 +1,16 @@
 #!/usr/bin/python3
-"""rectangle class"""
+"""
+rectangle class
+"""
 
 
 from models.base import Base
 
 
 class Rectangle(Base):
-    """define the class rectangle"""
+    """
+    define the class rectangle
+    """
     def __init__(self, width, height, x=0, y=0, id=None):
         """constructor for rectangle"""
         self.width = width
@@ -76,10 +80,10 @@ class Rectangle(Base):
         return self.__width * self.height
 
     def display(self):
-        """Prints in stdout with character #"""
-        print("\n" * self.__y, end="")
-        print(((" " * self.__x) + ("#" * self.__width) + "\n")*self.__height,
-        end="")
+        '''method to print'''
+        dis1 = '\n' * self.__y
+        dis2 = (((' ' * self.__x) + '#' * self.__width + '\n') * self.__height)
+        print(dis1 + dis2[:-1])
 
     def __str__(self):
         """string representation"""
