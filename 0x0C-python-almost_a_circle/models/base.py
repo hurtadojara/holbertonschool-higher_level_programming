@@ -1,36 +1,96 @@
 #!/usr/bin/python3
 """
-base for objects
+base class
 """
+import json
+import csv
 
 
 class Base:
     """
-    base for all point in the proyect
+    Base creat
     """
     __nb_objects = 0
 
     def __init__(self, id=None):
+        """Initialization"""
         if id is not None:
             self.id = id
         else:
-            self.__nb_objects += 1
-            self.id = self.__nb_objects
+            Base.__nb_objects += 1
+            self.id = Base.__nb_objects
+
+    @staticmethod
+    def to_json_string(list_dictionaries):
+        """ json string p. """
+        if list_dictionaries is None or {}:
+            return "[]"
+        return json.dumps(list_dictionaries)
+
+    @classmethod
+    def save_to_file(cls, list_objs):
+        """writes JSON string to a file"""
+        filename = cls.__name__ + ".json"
+        _list = []
+        if list_objs is not None:
+            for i in list_objs:
+                _list.append(i.to_dictionary())
+        else:
+            _list = []
+        with open(filename, "w") as f:
+            f.write(cls.to_json_string(_list))
 
     @staticmethod
     def from_json_string(json_string):
-        '''
-        staticmethod from_json_string
-        '''
+        """ loads file JSON """
         if json_string is None or len(json_string) == 0:
             return []
         return json.loads(json_string)
 
-    @staticmethod
-    def to_json_string(list_dictionaries):
-        '''
-        staticmethod to_json_string
-        '''
-        if list_dictionaries is None or not list_dictionaries:
-            return "[]"
-        return json.dumps(list_dictionaries)
+    @classmethod
+    def create(cls, **dictionary):
+        """instance with all atributes ready"""
+        if cls.__name__ == "Rectangle":
+            dummy = cls(1, 1)
+        if cls.__name__ == "Square":
+            dummy = cls(1)
+        dummy.update(**dictionary)
+        return dummy
+
+    @classmethod
+    def load_from_file(cls):
+        """list of instances"""
+        filename = cls.__name__ + ".json"
+        tmp_list = []
+        try:
+            with open(filename, 'r')as f:
+                tmp_list = Base.from_json_string(f.read())
+            for item, j in enumerate(tmp_list):
+                tmp_list[item] = cls.create(**tmp_list[item])
+        except Exception:
+            pass
+        return tmp_list
+
+    @classmethod
+    def save_to_file_csv(cls, list_objs):
+        """ save file format in csv """
+        filename = cls.__name__ + ".csv"
+        lista = [i.to_dictionary() for i in list_objs]
+        with open(filename, 'w') as f:
+            dictionaries = csv.DictWriter(f, lista[0].keys())
+            dictionaries.writeheader()
+            dictionaries.writerows(lista)
+
+    @classmethod
+    def load_from_file_csv(cls):
+        """serializes and deserializes in CSV"""
+        filename = cls.__name__ + ".csv"
+        list_ = {}
+        list_2 = []
+        with open(filename, "r") as csv_f:
+            csv_reader = csv.DictReader(csv_f)
+            for row in csv_reader:
+                for l_key, l_value in dict(row).items():
+                    list_[l_key] = int(l_value)
+                list_2.append(cls.create(**list_))
+            return list_2
