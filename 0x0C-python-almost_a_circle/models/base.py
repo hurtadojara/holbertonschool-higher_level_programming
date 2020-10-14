@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""base for objects"""
+'''base for objects'''
 
 
 class Base:
