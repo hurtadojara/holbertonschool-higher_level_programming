@@ -18,6 +18,16 @@ class Rectangle(Base):
         self.y = y
         super().__init__(id)
 
+    @staticmethod
+    def validator(name, value):
+        """Validator of all setter methods and instantiation"""
+        if type(value) is not int:
+            raise TypeError("{:s} must be an integer".format(name))
+        if name in ["width", "height"] and value <= 0:
+            raise ValueError("{:s} must be > 0".format(name))
+        if name in ["x", "y"] and value < 0:
+            raise ValueError("{:s} must be >= 0".format(name))
+
     @property
     def width(self):
         """width getter for class"""
