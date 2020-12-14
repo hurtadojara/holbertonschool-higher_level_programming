@@ -5,14 +5,15 @@ from sys import argv
 import MySQLdb
 
 
-def filter(username, password, db, substr):
+def filter(usern, password, db, substr):
     """
     function to match a state from db
     """
-    conn = MySQLdb.connect(host="localhost", port=3306, user=username,
-                           passwd=password, db=db, charset="utf8")
-    cur = conn.cursor()
-    cur.execute("SELECT cities.name FROM cities INNER JOIN states ON states.id =\
+    db = MySQLdb.connect(host="localhost", port=3306, user=usern,
+                         passwd=password, db=db, charset="utf8")
+    cur = db.cursor()
+    cur.execute("SELECT cities.name\
+                 FROM cities INNER JOIN states ON states.id =\
     cities.state_id WHERE states.name = %s", [substr])
     rows = cur.fetchall()
     cities = ""
@@ -20,7 +21,8 @@ def filter(username, password, db, substr):
         cities += str(*row) if cities == "" else ", " + str(*row)
     print(cities)
     cur.close()
-    conn.close()
+    db.close()
+
 
 if __name__ == "__main__":
     filter(argv[1], argv[2], argv[3], argv[4])
